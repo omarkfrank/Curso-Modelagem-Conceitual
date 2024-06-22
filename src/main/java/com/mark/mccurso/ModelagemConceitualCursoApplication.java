@@ -13,6 +13,7 @@ import com.mark.mccurso.domain.Cidade;
 import com.mark.mccurso.domain.Cliente;
 import com.mark.mccurso.domain.Endereco;
 import com.mark.mccurso.domain.Estado;
+import com.mark.mccurso.domain.ItemPedido;
 import com.mark.mccurso.domain.Pagamento;
 import com.mark.mccurso.domain.PagamentoComBoleto;
 import com.mark.mccurso.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.mark.mccurso.repositories.CidadeRepository;
 import com.mark.mccurso.repositories.ClienteRepository;
 import com.mark.mccurso.repositories.EnderecoRepository;
 import com.mark.mccurso.repositories.EstadoRepository;
+import com.mark.mccurso.repositories.ItemPedidoRepository;
 import com.mark.mccurso.repositories.PagamentoRepository;
 import com.mark.mccurso.repositories.PedidoRepository;
 import com.mark.mccurso.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class ModelagemConceitualCursoApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ModelagemConceitualCursoApplication.class, args);
@@ -115,5 +119,17 @@ public class ModelagemConceitualCursoApplication implements CommandLineRunner {
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 }
